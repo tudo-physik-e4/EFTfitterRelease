@@ -12,14 +12,16 @@ NBins="500"
 name="vl"
 min="-1.5"	max="1.5"
 SM_value="1"
-prior="const"
+prior="delta"
+delta_value="1"
 ></parameter0>
 
 <parameter1
 name="vr"
 min="-1.5"	max="1.5"
 SM_value="0"
-prior="const"
+prior="delta"
+delta_value="0"
 ></parameter1>
 
 <parameter2
