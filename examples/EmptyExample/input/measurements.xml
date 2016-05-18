@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='us-ascii'?>
+
+<!-- options -->
+<!-- number of observables, measurements and ucertainties -->
+<options
+NObservables="1"
+NMeasurements="1"
+NUncertainties="1"
+></options>
+
+
+<!-- observables -->
+<observable0
+name="Obs1"
+min="0"	max="100"
+></observable0>
+
+
+<!-- uncertainty names-->
+<uncertainties
+uncertainty0="stat"
+></uncertainties>
+
+
+<!-- Measurements -->
+<measurement0
+observable="Obs1"
+name="TestMeas"
+active="true"
+value="42"
+uncertainty0="3.5"
+></measurement0>
+
+
+<CorrelationMatrix>
+ 1 
+</CorrelationMatrix>
+
+
+
+<!-- Example:
+
+<CorrelationMatrix>
+ 1 			-0.94 		0		0
+-0.94		1 		    0	    0
+ 0 			0 			1 		0.75
+ 0			0 			0.75 	1
+</CorrelationMatrix>
+
+-->

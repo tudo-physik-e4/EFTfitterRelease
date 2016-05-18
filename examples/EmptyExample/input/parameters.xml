@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='us-ascii'?>
+
+
+<!-- Options -->
+<options
+NParams="2" 
+NBins="500"
+></options>
+
+
+<!-- Parameters -->
+<parameter0
+name="param1"
+min="-1.5"	max="1.5"
+SM_value="1"
+prior="const"
+></parameter0>
+
+<parameter1
+name="param2"
+min="-1.5"	max="1.5"
+SM_value="0"
+prior="const"
+></parameter1>
+
+
+
+<!-- Examples 
+
+
+Delta Prior:
+	<parameter0
+	name="vl"
+	min="-1.5"	max="1.5"
+	SM_value="1" Standard Model expectation
+	prior="delta"
+	delta_value="1"
+	></parameter0>
+
+
+Gaussian Prior:
+	<parameter0
+	name="vl"
+	min="-1.5"	max="1.5"
+	SM_value="1"
+	prior="gauss"
+	gauss_mean="1"
+	gauss_sigma="0.3"
+	></parameter0>
+
+-->

@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='us-ascii'?>
+
+<!-- options -->
+<options
+NObservables="4"
+NMeasurements="4"
+NUncertainties="1"
+NNuisance="0"
+></options>
+
+
+<!-- Observables -->
+<observable0
+name="F0"
+min="0"	max="100"
+></observable0>
+
+<observable1
+name="FL"
+min="0"	max="100"
+></observable1>
+
+<observable2
+name="XStchannelTop"
+min="0"	max="100"
+></observable2>
+
+<observable3
+name="XStchannelAntitop"
+min="0"	max="100"
+></observable3>
+
+
+<!-- Uncertainty Names-->
+<uncertainties
+uncertainty0="stat"
+></uncertainties>
+
+
+<!-- Measurements -->
+<measurement0
+observable="F0"
+name="ATLAS"
+active="true"
+value="68.2" 
+uncertainty0="4.5"
+></measurement0>
+
+<measurement1
+observable="FL"
+name="ATLAS"
+active="true"
+value="31.0"		
+uncertainty0="3.1"
+></measurement1>
+
+<measurement2
+observable="XStchannelTop"
+name="ATLAS"
+active="true"
+value="46"	
+uncertainty0="6.0"
+></measurement2>
+
+<measurement3
+observable="XStchannelAntitop"
+name="ATLAS"
+active="true"
+value="23"
+uncertainty0="3.0"
+></measurement3>
+
+
+<!-- Correlation matrices for each type of uncertainties-->
+<CorrelationMatrix0>
+ 1 			-0.95 		0		0
+-0.95		1 		    0	    0
+ 0 			0 			1 		0.5
+ 0			0 			0.5     1
+</CorrelationMatrix0>
+
+
+<!-- Nuisance Parameters -->
+<!--
+<nuisance_parameter0
+uncertainty="stat"
+measurement1="ATLAS"
+observable1="XStchannelTop"
+measurement2="ATLAS"
+observable2="XStchannelAntitop"
+parameter_name="rho"
+min="-1"
+max="1"
+prior="delta"
+delta_value="0.5"
+></nuisance_parameter0>
+-->
