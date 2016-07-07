@@ -7,7 +7,7 @@ EFTfitter is a tool for interpreting measurements in the context of effective fi
 Nuno Castro, Johannes Erdmann, Cornelius Grunwald, Kevin Kroeninger, Nils-Arne Rosien
 
 ## Required software
-* BAT (Tested with version 0.9.4.1, BAT 1.0 will not work at the moment)  
+* BAT (Tested with version 0.9.4.1, BAT 1.0 will not work at the moment), https://www.mppmu.mpg.de/bat/
 * ROOT (Tested with version 5.34)
 
 ## Content
