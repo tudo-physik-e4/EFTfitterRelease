@@ -1,4 +1,4 @@
-# EFTfitter version 1.0
+# EFTfitter version 1.01
 
 ## About
 EFTfitter is a tool for interpreting measurements in the context of effective field theories. It allows to combine measurements and take their correlations into account.
