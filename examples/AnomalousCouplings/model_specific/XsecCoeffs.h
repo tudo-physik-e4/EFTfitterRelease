@@ -1,7 +1,7 @@
 #ifndef __XSECCOEFFS__H
 #define __XSECCOEFFS__H
 
-#include "../../src/mvclocal/BCMVCPhysicsModel_EFT.h"
+#include "../../../src/mvclocal/BCMVCPhysicsModel_EFT.h"
 
 // ---------------------------------------------------------
 class XsecCoeffs

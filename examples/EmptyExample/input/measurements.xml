@@ -6,6 +6,7 @@
 NObservables="1"
 NMeasurements="1"
 NUncertainties="1"
+NNuisance="0"
 ></options>
 
 
@@ -32,19 +33,19 @@ uncertainty0="3.5"
 ></measurement0>
 
 
-<CorrelationMatrix>
+<CorrelationMatrix0>
  1 
-</CorrelationMatrix>
+</CorrelationMatrix0>
 
 
 
 <!-- Example:
 
-<CorrelationMatrix>
+<CorrelationMatrix0>
  1 			-0.94 		0		0
 -0.94		1 		    0	    0
  0 			0 			1 		0.75
  0			0 			0.75 	1
-</CorrelationMatrix>
+</CorrelationMatrix0>
 
 -->

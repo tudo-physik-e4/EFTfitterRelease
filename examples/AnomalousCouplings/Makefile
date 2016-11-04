@@ -25,8 +25,8 @@ CXXFLAGS    += $(ROOTCFLAGS)
 # BATINSTALLDIR environmental variable then the lines below are correct
 # and the compilation will work
 
-CXXFLAGS    += -I. -I./include -I$(BATINSTALLDIR)/include
-LIBS        += -L$(BATINSTALLDIR)/lib -lBATmodels -lBATmvc -lBAT $(ROOTLIBS)
+CXXFLAGS    += $(shell bat-config --cflags)
+LIBS        += $(shell bat-config --libs)
 
 # List of all classes (models) used in the program
 CXXSRCS      = \
@@ -52,7 +52,7 @@ GARBAGE      = $(CXXOBJS) $(EXEOBJS) *.o *~ link.d $(MYPROGS)
 
 
 # targets
-all : myfit
+all : directories myfit
 
 link.d : $(patsubst %.cxx,%.h,$(CXXSRCS))
 	$(CXX) -MM $(CXXFLAGS) $(CXXSRCS) > link.d;
@@ -64,6 +64,9 @@ link.d : $(patsubst %.cxx,%.h,$(CXXSRCS))
 
 clean :
 	$(RM) $(GARBAGE)
+
+directories:
+	mkdir -p results
 
 myfit : runAnomCouplings.cxx $(CXXOBJS)
 	$(CXX) $(CXXFLAGS) -c $<

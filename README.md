@@ -1,10 +1,15 @@
-# EFTfitter version 1.01
+# EFTfitter version 1.02
 
 ## About
 EFTfitter is a tool for interpreting measurements in the context of effective field theories. It allows to combine measurements and take their correlations into account.
 
 ## Authors
 Nuno Castro, Johannes Erdmann, Cornelius Grunwald, Kevin Kroeninger, Nils-Arne Rosien
+
+## Versions
+* 1.02: fixes for the out-of-the-box example
+* 1.01: one minor fix
+* 1.0: first version
 
 ## Required software
 * BAT (Tested with version 0.9.4.1, BAT 1.0 will not work at the moment), https://www.mppmu.mpg.de/bat/
