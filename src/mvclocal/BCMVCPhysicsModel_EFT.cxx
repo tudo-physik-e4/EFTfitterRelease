@@ -36,13 +36,14 @@ BCMVCPhysicsModel_EFT::~BCMVCPhysicsModel_EFT()
 double BCMVCPhysicsModel_EFT::LogLikelihood(const std::vector<double> &parameters)
 {
   std::vector<double> observables;
+  int NNormalParameters=GetNParameters()-fNNuisanceCorrelation;
 
   for (int i = 0; i < fNObservables; ++i)
     observables.push_back(CalculateObservable(i, parameters));
 
   // add nuisance parameters
   for(int j=0; j<fNNuisanceCorrelation; j++)
-    observables.push_back(parameters.at(fNObservables+j));
+    observables.push_back(parameters.at(NNormalParameters+j));
 
   return BCMVCombination_EFT::LogLikelihood(observables);
 }
@@ -52,7 +53,7 @@ void BCMVCPhysicsModel_EFT::AddObservable(std::string name, double min, double m
 {
   // check if observable exists already
   int index = GetIndexObservable(name);
- 
+
   if (index >= 0)
     return;
 
@@ -95,15 +96,15 @@ void BCMVCPhysicsModel_EFT::ReadParameters(std::string file)
 
 
   // read parameter names, min and max values from settings and add new parameter
-  for(int i=0; i<NParams; i++){ 
+  for(int i=0; i<NParams; i++){
     std::stringstream param;
     param<<"parameter"<<i;
 
     if(doc.FirstChildElement(param.str().c_str())==NULL){
       throw std::runtime_error("Could not find \""+param.str()+"\"! Please check attribute \"NParams\" in file \""+file+"\"\n");}
-    
+
     std::string name=doc.FirstChildElement(param.str().c_str())->Attribute("name");
-   
+
     double min=0;
     if(doc.FirstChildElement(param.str().c_str())->QueryDoubleAttribute("min",&min)){
     throw std::runtime_error("Please check attribute \"min\" in \""+param.str()+"\" in file \""+file+"\"\n");}
@@ -113,7 +114,7 @@ void BCMVCPhysicsModel_EFT::ReadParameters(std::string file)
     throw std::runtime_error("Please check attribute \"max\" in \""+param.str()+"\" in file \""+file+"\"\n");}
 
     AddParameter(name.c_str(), min,max);
-    // set number of bins 
+    // set number of bins
     GetParameter(name.c_str())->SetNbins(NBins);
 
     // get SM value
@@ -162,7 +163,7 @@ void BCMVCPhysicsModel_EFT::ReadParameters(std::string file)
 // ---------------------------------------------------------
 void BCMVCPhysicsModel_EFT::PlotObservables(std::string filename){
 
-  TFile *file = new TFile((filename + ".root").c_str(), "RECREATE"); 
+  TFile *file = new TFile((filename + ".root").c_str(), "RECREATE");
   std::vector<double> Parameters_new (GetNParameters()-fNNuisanceCorrelation);
   TGraph *gr1; // TGraph for plots
   TGraph *gr2; //Tgraph for SM values
@@ -197,10 +198,10 @@ void BCMVCPhysicsModel_EFT::PlotObservables(std::string filename){
       }
 
       //fill Graph with line
-      gr1 = new TGraph(NSteps,x,y); 
+      gr1 = new TGraph(NSteps,x,y);
 
       // Graph for SM value
-      gr2 = new TGraph(1); 
+      gr2 = new TGraph(1);
       gr2->SetPoint(0,Parameters_SM.at(p),CalculateObservable(j, Parameters_SM)); // add SM value to Graph 2
 
       // combine line and SM-point in one TMultiGraph:
@@ -227,7 +228,7 @@ void BCMVCPhysicsModel_EFT::PlotObservables(std::string filename){
       delete c1;
       delete mg;
     }
-  }  
+  }
 }
 
 // ---------------------------------------------------------
@@ -245,7 +246,7 @@ void BCMVCPhysicsModel_EFT::ReadMeasurements(std::string filename){
    int nobservables=0;
    if(doc.FirstChildElement("options")->QueryIntAttribute("NObservables",&nobservables)){
     throw std::runtime_error("Please check attribute \"NObservables\" in file \""+filename+"\"\n"); }
- 
+
    int nmeasurements=0;
    if(doc.FirstChildElement("options")->QueryIntAttribute("NMeasurements",&nmeasurements)){
     throw std::runtime_error("Please check attribute \"NMeasurements\" in file \""+filename+"\"\n"); }
@@ -280,7 +281,7 @@ void BCMVCPhysicsModel_EFT::ReadMeasurements(std::string filename){
       double min=0;
       if(doc.FirstChildElement(obs.str().c_str())->QueryDoubleAttribute("min",&min)){
         throw std::runtime_error("Please check attribute \"min\" in \""+obs.str()+"\" in file \""+filename+"\"\n");}
-     
+
      double max=0;
       if(doc.FirstChildElement(obs.str().c_str())->QueryDoubleAttribute("max",&max)){
         throw std::runtime_error("Please check attribute \"max\" in \""+obs.str()+"\" in file \""+filename+"\"\n");}
@@ -308,7 +309,7 @@ void BCMVCPhysicsModel_EFT::ReadMeasurements(std::string filename){
       //check if unc exists
       if(doc.FirstChildElement("uncertainties")->Attribute(unc.str().c_str())==NULL){
       throw std::runtime_error("Could not find \""+unc.str()+"\"! Please check attribute \"NUncertainties\" in file \""+filename+"\"\n");}
-      
+
       std::string name=doc.FirstChildElement("uncertainties")->Attribute(unc.str().c_str());
       AddUncertainty(name);
    }
@@ -375,7 +376,7 @@ void BCMVCPhysicsModel_EFT::ReadMeasurements(std::string filename){
      std::string correlation = doc.FirstChildElement(matrix.str().c_str())->GetText();
      std::stringstream corr;
      corr<<correlation;
-   
+
       TMatrixD mat(nmeasurements, nmeasurements);
 
       for (int j = 0; j < nmeasurements; ++j){
@@ -385,12 +386,12 @@ void BCMVCPhysicsModel_EFT::ReadMeasurements(std::string filename){
           mat[j][k] = c;
         }
       }
-        
-      GetUncertainty(i)->SetCorrelationMatrix(mat);     
+
+      GetUncertainty(i)->SetCorrelationMatrix(mat);
    }
 
   AddNuisanceParameter(filename); // call function for adding nuisance parameters
-  
+
  PrepareAnalysis();
 }
 
@@ -427,31 +428,31 @@ void BCMVCPhysicsModel_EFT::AddNuisanceParameter(std::string filename){
 
       if(doc.FirstChildElement(nuis.str().c_str())->Attribute("uncertainty")==NULL){
         throw std::runtime_error("Please check attribute \"uncertainty\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");}
-      std::string uncertainty=doc.FirstChildElement(nuis.str().c_str())->Attribute("uncertainty"); 
+      std::string uncertainty=doc.FirstChildElement(nuis.str().c_str())->Attribute("uncertainty");
 
       if(doc.FirstChildElement(nuis.str().c_str())->Attribute("measurement1")==NULL){
         throw std::runtime_error("Please check attribute \"measurement1\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");}
-      std::string measurement1=doc.FirstChildElement(nuis.str().c_str())->Attribute("measurement1");  
+      std::string measurement1=doc.FirstChildElement(nuis.str().c_str())->Attribute("measurement1");
 
       if(doc.FirstChildElement(nuis.str().c_str())->Attribute("observable1")==NULL){
         throw std::runtime_error("Please check attribute \"observable1\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");}
-      std::string observable1=doc.FirstChildElement(nuis.str().c_str())->Attribute("observable1");  
+      std::string observable1=doc.FirstChildElement(nuis.str().c_str())->Attribute("observable1");
 
       if(doc.FirstChildElement(nuis.str().c_str())->Attribute("measurement2")==NULL){
         throw std::runtime_error("Please check attribute \"measurement2\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");}
-      std::string measurement2=doc.FirstChildElement(nuis.str().c_str())->Attribute("measurement2");  
+      std::string measurement2=doc.FirstChildElement(nuis.str().c_str())->Attribute("measurement2");
 
       if(doc.FirstChildElement(nuis.str().c_str())->Attribute("observable2")==NULL){
         throw std::runtime_error("Please check attribute \"observable2\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");}
-      std::string observable2=doc.FirstChildElement(nuis.str().c_str())->Attribute("observable2");  
+      std::string observable2=doc.FirstChildElement(nuis.str().c_str())->Attribute("observable2");
 
       if(doc.FirstChildElement(nuis.str().c_str())->Attribute("parameter_name")==NULL){
         throw std::runtime_error("Please check attribute \"parameter_name\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");}
-      std::string parname=doc.FirstChildElement(nuis.str().c_str())->Attribute("parameter_name");  
+      std::string parname=doc.FirstChildElement(nuis.str().c_str())->Attribute("parameter_name");
 
        if(doc.FirstChildElement(nuis.str().c_str())->Attribute("prior")==NULL){
         throw std::runtime_error("Please check attribute \"prior\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");}
-      std::string priorshape=doc.FirstChildElement(nuis.str().c_str())->Attribute("prior");  
+      std::string priorshape=doc.FirstChildElement(nuis.str().c_str())->Attribute("prior");
 
 
     // check if parameter exists already
@@ -477,7 +478,7 @@ void BCMVCPhysicsModel_EFT::AddNuisanceParameter(std::string filename){
     double pre = 1;
 
     // set index
-   int index = GetNObservables()-1;
+   int index = GetNParameters()-1;
 
      if (priorshape == "const") {
       SetPriorConstant(parname.c_str());
@@ -506,7 +507,7 @@ void BCMVCPhysicsModel_EFT::AddNuisanceParameter(std::string filename){
     else {
      throw std::runtime_error("Please check attribute \"prior\" in \""+nuis.str()+"\" in file \""+filename+"\"\n");
     }
-    
+
 
     // increase counter of nuisance parameters
     fNNuisanceCorrelation++;
@@ -565,7 +566,7 @@ void BCMVCPhysicsModel_EFT::GetRanking(std::string flag, double p, std::string f
 
   // get original areas 1D
   PrepareAnalysis();
-  MarginalizeAll();    
+  MarginalizeAll();
 
   std::vector<double> orig_areas1D(NParams);
   int NFreeParams=0;
@@ -603,7 +604,7 @@ void BCMVCPhysicsModel_EFT::GetRanking(std::string flag, double p, std::string f
 
     // if measurement/uncertainty already deactivated, continue
     std::vector<bool> active(orig_status);
-    if(active.at(i)==0){ 
+    if(active.at(i)==0){
       continue;
     }
 
@@ -622,7 +623,7 @@ void BCMVCPhysicsModel_EFT::GetRanking(std::string flag, double p, std::string f
     }
 
     PrepareAnalysis();
-    MarginalizeAll();    
+    MarginalizeAll();
 
     // 1D ranking
     for(unsigned int j=0; j<NParams; j++){
@@ -647,7 +648,7 @@ void BCMVCPhysicsModel_EFT::GetRanking(std::string flag, double p, std::string f
     if(Counter_2D!=NCombinations){
       throw std::runtime_error("Error: Range of Counter_2D in GetRanking wrong");
     }
- 
+
   } // end of measurement/uncertainty loop
 
   // set measurements/uncertainties status back to original
@@ -673,7 +674,7 @@ void BCMVCPhysicsModel_EFT::GetRanking(std::string flag, double p, std::string f
 
   // get original results
   PrepareAnalysis();
-  MarginalizeAll(); 
+  MarginalizeAll();
 }
 
 
@@ -692,7 +693,7 @@ void BCMVCPhysicsModel_EFT::PrintRanking2D(std::string flag, std::ofstream& out,
         out<<"------------------------------------------------------"<<std::endl;}
       else if(flag=="uncertainty"){out<< std::left << std::setw(5)<<"Rank"<<"        "<<"Uncertainty"<<"          "<<"Decrease (%)"<<std::endl;
         out<<"------------------------------------------------"<<std::endl;}
-      
+
       // calculate ranking
       std::vector<std::pair<int,double> > rank; // first: measurement_index, second: rank
 
@@ -714,7 +715,7 @@ void BCMVCPhysicsModel_EFT::PrintRanking2D(std::string flag, std::ofstream& out,
         }
       }
 
-  
+
      if(flag=="measurement"){std::sort(rank.begin(), rank.end(), BCMVCPhysicsModel_EFT::pairCompare1);}
      else if(flag=="uncertainty"){std::sort(rank.begin(), rank.end(), BCMVCPhysicsModel_EFT::pairCompare2);}
 
@@ -741,7 +742,7 @@ void BCMVCPhysicsModel_EFT::PrintRanking1D(std::string flag, std::ofstream& out,
 
   out<<"Results of the one-dimensional "<<flag<<" ranking based on the "<<p*100<<" % interval: \n"<<std::endl;
 
-  for(unsigned int j=0; j<NParams; j++){ 
+  for(unsigned int j=0; j<NParams; j++){
     if(GetParameter(j)->Fixed()!=0){continue;}
 
     out<<"Ranking based on parameter \""<<GetParameter(j)->GetName()<<"\" (parameter "<<j<<"):"<<std::endl;
@@ -774,7 +775,7 @@ void BCMVCPhysicsModel_EFT::PrintRanking1D(std::string flag, std::ofstream& out,
 
     if(flag=="measurement"){std::sort(rank.begin(), rank.end(), BCMVCPhysicsModel_EFT::pairCompare1);}
     else if(flag=="uncertainty"){std::sort(rank.begin(), rank.end(), BCMVCPhysicsModel_EFT::pairCompare2);}
-    
+
     // print ranking
     for(unsigned int i=0; i<rank.size();i++){
       int index=rank.at(i).first;
@@ -799,21 +800,21 @@ void BCMVCPhysicsModel_EFT::GetMeasurementRanking(double p, std::string file){
 
 double BCMVCPhysicsModel_EFT::GetArea1D(int index, double p){
   BCH1D* bchist = GetMarginalized(GetParameter(index));
-  
+
   std::vector< double > s;
   s=bchist->GetSmallestIntervals(p); // s.size()=5*i (0: min, 1: max, 2: relative height, 3: local mode, 4: relative area)
-  double sum=0; 
+  double sum=0;
   // add area of all smallest intervals
   for (int i = 0; i <(s.size()/5.); i++){
       double x=0;
       x=s.at(i*5+1)-s.at(i*5);
       sum+=x;
-    }  
-    
+    }
+
   return sum;
 }
 
-// --------------------------------------------------------- 
+// ---------------------------------------------------------
 
 double BCMVCPhysicsModel_EFT::GetArea2D(int i1, int i2, double p){
   BCH2D* bchist = GetMarginalized(GetParameter(i1),GetParameter(i2));
@@ -864,8 +865,8 @@ double BCMVCPhysicsModel_EFT::GetArea2D(int i1, int i2, double p){
 
 
 
-// --------------------------------------------------------- 
- 
+// ---------------------------------------------------------
+
 bool BCMVCPhysicsModel_EFT::pairCompare1(const std::pair<int,double>& a, const std::pair<int,double>& b) {
   return a.second > b.second;
 

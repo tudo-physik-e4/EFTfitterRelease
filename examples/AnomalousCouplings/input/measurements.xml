@@ -42,7 +42,7 @@ uncertainty0="stat"
 observable="F0"
 name="ATLAS"
 active="true"
-value="68.2" 
+value="68.2"
 uncertainty0="4.5"
 ></measurement0>
 
@@ -50,7 +50,7 @@ uncertainty0="4.5"
 observable="FL"
 name="ATLAS"
 active="true"
-value="31.0"		
+value="31.0"
 uncertainty0="3.1"
 ></measurement1>
 
@@ -58,7 +58,7 @@ uncertainty0="3.1"
 observable="XStchannelTop"
 name="ATLAS"
 active="true"
-value="46"	
+value="46"
 uncertainty0="6.0"
 ></measurement2>
 
@@ -91,7 +91,8 @@ observable2="XStchannelAntitop"
 parameter_name="rho"
 min="-1"
 max="1"
-prior="delta"
-delta_value="0.5"
+prior="gauss"
+gauss_mean="0.5"
+gauss_sigma="0.1"
 ></nuisance_parameter0>
 -->
